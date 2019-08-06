@@ -83,11 +83,12 @@ PROGMEM static const RH_RF69::ModemConfig MODEM_CONFIG_TABLE[] =
 //    { CONFIG_FSK,  0x0c, 0x80, 0x02, 0x8f, 0x53, 0x53, CONFIG_WHITE}, // works 10/40/40
 
 };
-RH_RF69::RH_RF69(uint8_t slaveSelectPin, uint8_t interruptPin, RHGenericSPI& spi)
+RH_RF69::RH_RF69(uint8_t slaveSelectPin, uint8_t interruptPin, uint8_t resetPin, RHGenericSPI& spi)
     :
     RHSPIDriver(slaveSelectPin, spi)
 {
     _interruptPin = interruptPin;
+    _resetPin = resetPin;
     _idleMode = RH_RF69_OPMODE_MODE_STDBY;
     _myInterruptIndex = 0xff; // Not allocated yet
 }
@@ -99,6 +100,13 @@ void RH_RF69::setIdleMode(uint8_t idleMode)
 
 bool RH_RF69::init()
 {
+    // Reset routine
+    pinMode(_resetPin, OUTPUT);
+    digitalWrite(_resetPin, HIGH);
+    delay(10);
+    digitalWrite(_resetPin, LOW);
+    delay(5);
+	
     if (!RHSPIDriver::init())
 	return false;
 

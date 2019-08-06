@@ -705,7 +705,7 @@ public:
     /// On other boards, any digital pin may be used.
     /// \param[in] spi Pointer to the SPI interface object to use. 
     ///                Defaults to the standard Arduino hardware SPI interface
-    RH_RF69(uint8_t slaveSelectPin = SS, uint8_t interruptPin = 2, RHGenericSPI& spi = hardware_spi);
+    RH_RF69(uint8_t slaveSelectPin = SS, uint8_t interruptPin = 2, uint8_t resetPin = 3, RHGenericSPI& spi = hardware_spi);
   
     /// Initialises this instance and the radio module connected to it.
     /// The following steps are taken:
@@ -893,6 +893,9 @@ protected:
 
     /// The configured interrupt pin connected to this instance
     uint8_t             _interruptPin;
+
+    /// The configured reset pin connected to this instance
+    uint8_t             _resetPin;
 
     /// The index into _deviceForInterrupt[] for this device (if an interrupt is already allocated)
     /// else 0xff
